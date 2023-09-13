@@ -1,0 +1,155 @@
+﻿@page "/ponuda"
+
+@using System.Net.Mail;
+
+
+<!-- Quote Start -->
+<div class="container-fluid bg-light overflow-hidden my-5 px-lg-0">
+    <div class="container quote px-lg-0">
+        <div class="row g-0 mx-lg-0">
+            <div class="col-lg-6 ps-lg-0" style="min-height: 400px;">
+                <div class="position-relative h-100">
+                    <img class="position-absolute img-fluid w-100 h-100" src="img/freequote.jpg" style="object-fit: cover;" alt="">
+                </div>
+            </div>
+            <div class="col-lg-6 quote-text py-5 wow fadeIn" data-wow-delay="0.5s">
+                <div class="p-lg-5 pe-lg-0">
+                    <div class="section-title text-start">
+                        <h1 class="display-5 mb-4">Бесплатна понуда</h1>
+                    </div>
+                    <p class="mb-4 pb-2">Ние сме овде да ги оствариме вашите идеи и да ви обезбедиме најдоброто со ПВЦ прозорци и врати. Ве молиме, испратете го вашето барање со димензии преку формуларот подолу. Нашиот тим на ќе ви одговори во најскоро време со детална понуда.</p>
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-12 col-sm-6">
+                                <input value="@Name" @oninput="UpdateName" type=" text" class="form-control border-0" placeholder="Вашето име" style="height: 55px;">
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <input value="@Email" @oninput="UpdateEmail" type="email" class="form-control border-0" placeholder="е-маил" style="height: 55px;">
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <input value="@Name" @oninput="UpdateNumber" type=" text" class="form-control border-0" placeholder="Вашето име" style="height: 55px;">
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <input type="text" class="form-control border-0" placeholder="Телефонски број" style="height: 55px;">
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <select class="form-select border-0" style="height: 55px;">
+                                    <option selected>Град</option>
+                                    <option value="1">Скопје</option>
+                                    <option value="2">Тетово</option>
+                                    <option value="3">Гостивар</option>
+                                    <option value="1">Куманово</option>
+                                    <option value="1">Крива Паланка</option>
+                                    <option value="1">Кратово</option>
+                                    <option value="1">Прилеп</option>
+                                    <option value="1">Ресен</option>
+                                    <option value="1">Крушево</option>
+                                    <option value="1">Демир Хисар</option>
+                                    <option value="1">Битола</option>
+                                    <option value="1">Струмица</option>
+                                    <option value="1">Радовиш</option>
+                                    <option value="1">Гевгелија</option>
+                                    <option value="1">Валандово</option>
+                                    <option value="1">Богданци</option>
+                                    <option value="1">Струга</option>
+                                    <option value="1">Охрид</option>
+                                    <option value="1">Македонски Брод</option>
+                                    <option value="1">Кичево</option>
+                                    <option value="1">Дебар</option>
+                                    <option value="1">Штип</option>
+                                    <option value="1">Пробиштип</option>
+                                    <option value="1">Пехчево</option>
+                                    <option value="1">Македонска Каменица</option>
+                                    <option value="1">Кочани</option>
+                                    <option value="1">Делчево</option>
+                                    <option value="1">Виница</option>
+                                    <option value="1">Берово</option>
+                                    <option value="1">Свети Николе</option>
+                                    <option value="1">Неготино</option>
+                                    <option value="1">Кавадарци</option>
+                                    <option value="1">Демир Капија</option>
+                                    <option value="1">Велес</option>
+
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <textarea value="@Body" @oninput="UpdateBody" class="form-control border-0" placeholder="Вашето барање"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button style="background-color:#387aba; border-color:#387aba" @onclick="SendEmail" class="btn btn-primary w-100 py-3" type="submit">Прати</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Quote End -->
+@code {
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Body { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
+    public string Number { get; set; } = string.Empty;
+
+    private void UpdateName(ChangeEventArgs e)
+    {
+        Name = e.Value.ToString();
+    }
+
+    private void UpdateEmail(ChangeEventArgs e)
+    {
+        Email = e.Value.ToString();
+    }
+
+    private void UpdateNumber(ChangeEventArgs e)
+    {
+        Number = e.Value.ToString();
+    }
+
+    private void UpdateBody(ChangeEventArgs e)
+    {
+        Body = e.Value.ToString();
+    }
+
+    private void SendEmail()
+    {
+        try
+        {
+            using (MailMessage mail = new MailMessage())
+            {
+                if (!string.IsNullOrEmpty(Email))
+                {
+                    mail.From = new MailAddress("elvirwindows@hotmail.com");
+                    mail.To.Add("elvirhrustemovic01@gmail.com");
+                    mail.Subject = "Ponuda";
+                    mail.Body = $"Name: {Name}\nEmail: {Email}\nMessage: {Body}\nNumber: {Number}";
+                    mail.IsBodyHtml = false;
+
+                    using (SmtpClient smtp = new SmtpClient("smtp.example.com", 587))
+                    {
+                        smtp.Credentials = new System.Net.NetworkCredential("elvirwindows@hotmail.com", "Hrustemovic1!");
+                        smtp.EnableSsl = true;
+                        smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Send(mail);
+                        Message = "Mail Sent";
+                    }
+                }
+                else
+                {
+                    Message = "Email cannot be empty";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Message = ex.Message;
+        }
+    }
+
+
+}
+
